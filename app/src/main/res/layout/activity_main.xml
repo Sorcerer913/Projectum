@@ -19,18 +19,30 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" /-->
+
     <FrameLayout
         android:id="@+id/container"
-        android:background="@color/fragment_color"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="80dp"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:background="@color/fragment_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="0dp"
+        android:layout_height="378dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -43,25 +55,25 @@
         app:layout_constraintTop_toBottomOf="@+id/container">
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/objects"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="Объекты" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/addings"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="Функции" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/records"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="Запись" />
     </LinearLayout>
 
 
