@@ -3,7 +3,7 @@ package com.example.veryness.main;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Cellular {
+public class Cellular {/*
 
     private int width;
     private int height;
@@ -47,7 +47,7 @@ public class Cellular {
 
         return states.toArray(new int[states.size()][]);
 
-    }
-}
+    }*/
 
+}
 

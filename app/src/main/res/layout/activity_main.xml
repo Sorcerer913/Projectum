@@ -59,13 +59,17 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Объекты" />
+            android:background="#FFEB3B"
+            android:text="Объекты"
+            android:textColor="#FFFFFFFF" />
 
         <Button
             android:id="@+id/addings"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="#8BC34A"
+            android:textColor="#FFFFFFFF"
             android:text="Функции" />
 
         <Button
@@ -73,7 +77,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Запись" />
+            android:background="#673AB7"
+            android:text="Запись"
+            android:textColor="#FFFFFFFF" />
     </LinearLayout>
 
 

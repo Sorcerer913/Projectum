@@ -1,4 +1,4 @@
-package com.example.veryness.main;
+package com.example.veryness;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,19 +9,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class MainFragment extends Fragment {
-/*
+import com.example.veryness.main.MainViewModel;
+
+public class MainFragment1 extends Fragment {
+
     private MainViewModel mViewModel;
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static MainFragment1 newInstance() {
+        return new MainFragment1();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return new SurfaceFractal(super.getContext());
+        Surfaceanim screen=new Surfaceanim(super.getContext());
+
+        return screen;//new SurfaceFractal(super.getContext());
         //return inflater.inflate(R.layout.main_fragment, container, false);
     }
 
@@ -55,7 +59,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }*/
+    }
 }
 
 

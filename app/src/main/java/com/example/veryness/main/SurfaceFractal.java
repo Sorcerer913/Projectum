@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-class SurfaceFractal extends SurfaceView implements SurfaceHolder.Callback {
+ /*abstract class SurfaceFractal extends SurfaceView implements SurfaceHolder.Callback {
     final String TAG = "TEST_SPACE";
 
     public SurfaceFractal(Context context) {
@@ -64,7 +64,7 @@ class SurfaceFractal extends SurfaceView implements SurfaceHolder.Callback {
                             canvas.drawPoint(i, j, paint1);
                         }/*else{
                             canvas.drawPoint(i, j, paint2);
-                        }*/
+                        }
 
                     }
                 }
@@ -74,4 +74,4 @@ class SurfaceFractal extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-}
+}*/
