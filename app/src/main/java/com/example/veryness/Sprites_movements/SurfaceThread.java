@@ -23,15 +23,15 @@ class SurfaceThread extends Thread {
             long Time0 = System.currentTimeMillis();
             long Time_ = Time0 - Time;
 
-            if (Time_ > 30) {
+            if (Time_ > 80) {
                 Time = Time0;
+                if(Holder!=null){
                 canvas = Holder.lockCanvas();
                 synchronized (Holder) {
                     this.view.draw(canvas);
-
                 }
 
-                if (canvas != null) Holder.unlockCanvasAndPost(canvas);
+                if (canvas != null) Holder.unlockCanvasAndPost(canvas);}
             }
         }
     }

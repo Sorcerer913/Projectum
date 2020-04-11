@@ -1,4 +1,4 @@
-package com.example.veryness;
+package com.example.veryness.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.veryness.R;
 import com.example.veryness.workingfragments.AddingFragment;
 import com.example.veryness.workingfragments.MainFragment;
 import com.example.veryness.workingfragments.ObjectFragment;
@@ -29,21 +30,21 @@ good luck!! */
     Button button2;
     Button button3;
     public static int SPLASH_TIME_OUT=2000;
-
+    public MainFragment fragment=MainFragment.newInstance(1);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(savedInstanceState == null){
-            buildFragment(0);
-        }else{
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitNow();
+       // if(savedInstanceState == null){
+            //buildFragment(0);
+       // }else{
             //TODO: savedInstanceState
-        }
+       // }
 
         button1 = findViewById(R.id.objects);
         button2 = findViewById(R.id.addings);
         button3 = findViewById(R.id.records);
-        Button button=findViewById(R.id.fragmentContainer).findViewById(R.id.button);
         button1.setOnClickListener(myOnClickListener);
 
 

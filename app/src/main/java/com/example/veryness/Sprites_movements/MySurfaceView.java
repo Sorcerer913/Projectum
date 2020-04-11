@@ -75,10 +75,18 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             touchevent = true;
             touchx = event.getX();
             touchy = event.getY();
+            j=sprite.size();
             if(sprite_image!=null){
-            for (j=0; j<sprite.size(); j++)
-                sprite.get(j).setTarget(touchx, touchy);
-            sprite.add(j, new Sprites(this, sprite_image, touchx, touchy,columna,rowa));}
+           // for (j=0; j<sprite.size(); j++){
+                if (j != 0) {
+                    if(sprite.get(j-1)!=null){
+                        sprite.get(j-1).setTarget(touchx, touchy);//}
+                    }
+                }
+            if(j%2==0){
+                sprite.add(j, new Sprites(this, sprite_image, touchx, touchy,columna,rowa));}
+            else{sprite.add(null);}
+            }
 
             /*
             stepx = (touchx - currentx)/width*100;// расчет скоростей
@@ -106,7 +114,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         checkWall();*/
 
         for (int i=0; i<sprite.size(); i++){
-            sprite.get(i).draw(canvas);   //direction 3 вверх 0 вниз 2вправо 1 влево
+            if(sprite.get(i)!=null){
+            sprite.get(i).draw(canvas);  } //direction 3 вверх 0 вниз 2вправо 1 влево
         }
     }
 

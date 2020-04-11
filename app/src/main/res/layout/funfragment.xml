@@ -6,27 +6,17 @@
     android:background="@color/Funfragment"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="141dp" />
+        android:layout_height="1135dp"
+        >
 
-    <ScrollView
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Button" />
-        </LinearLayout>
-    </ScrollView>
-
-
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+       >
+    </LinearLayout>
 </LinearLayout>

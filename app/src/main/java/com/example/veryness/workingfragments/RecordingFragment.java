@@ -18,8 +18,7 @@ public class RecordingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         assert container != null;
-        button=container.findViewById(R.id.button);
-
+       // button=container.findViewById(R.id.button);
         return inflater.inflate(R.layout.recfragment, container, false);
     }
 }

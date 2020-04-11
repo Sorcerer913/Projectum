@@ -10,11 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.veryness.Sprites_movements.MySurfaceView;
-import com.example.veryness.main.MainViewModel;
+
 
 public class MainFragment extends Fragment {
 
-    private MainViewModel mViewModel;
+    private static final String ARG_COLUMN_COUNT = "column-count";
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -29,11 +29,18 @@ public class MainFragment extends Fragment {
         return new MySurfaceView(super.getContext());
         //return inflater.inflate(R.layout.main_fragment, container, false);
     }
+    public static MainFragment newInstance(int columnCount) {
+        MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        //m
         // TODO: Use the ViewModel
     }
 

@@ -24,25 +24,34 @@ import java.io.InputStream;
 public class ObjectFragment extends Fragment implements View.OnClickListener {
     private static String TAG = "Picture";
     Button button;
+    Button cancelobject;
     Bitmap mpy;
     Bitmap bir;
+    Bitmap bir1;
     Bitmap fen;
     Drawable d;
     Drawable e;
     Drawable f;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         assert container != null;
-        button = container.findViewById(R.id.button);
+         //button = container.findViewById(R.id.button);
          mpy=BitmapFactory.decodeResource(getResources(),R.drawable.sprites);
          bir=BitmapFactory.decodeResource(getResources(),R.drawable.birds);
          fen=BitmapFactory.decodeResource(getResources(),R.drawable.spreee);
          e=new BitmapDrawable(getResources(),Bitmap.createBitmap(bir,0,0,bir.getWidth()/5,bir.getHeight()/3));
+         bir1=Bitmap.createBitmap(bir,0,0,bir.getWidth()/5*4,bir.getHeight());
          d = new BitmapDrawable(getResources(),Bitmap.createBitmap(mpy,0,0,mpy.getWidth()/3,mpy.getHeight()/4) );
          f=new BitmapDrawable(getResources(),Bitmap.createBitmap(fen,0,0,fen.getWidth()/4,fen.getHeight()/4));
-            return inflater.inflate(R.layout.objfragment, container, false);
+         return inflater.inflate(R.layout.objfragment, container, false);
     }
 
     @Override
@@ -50,6 +59,7 @@ public class ObjectFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         Button firstobject = (Button) getView().findViewById(R.id.firstobject);
         Button secondobject=(Button) getView().findViewById(R.id.secondobject);
+        cancelobject=(Button)getView().findViewById(R.id.cancelobject);
         Button thirdobject=(Button) getView().findViewById(R.id.thirdobject);
         secondobject.setBackground(e);
         firstobject.setBackground(d);
@@ -57,6 +67,7 @@ public class ObjectFragment extends Fragment implements View.OnClickListener {
         firstobject.setOnClickListener(this);
         secondobject.setOnClickListener(this);
         thirdobject.setOnClickListener(this);
+        cancelobject.setOnClickListener(this);
 
     }
 
@@ -76,12 +87,17 @@ public class ObjectFragment extends Fragment implements View.OnClickListener {
             case R.id.secondobject:
                 Log.v(TAG, "onClick");
                 assert viewer != null;
-                viewer.setSprite_image(bir,5,3);
+                viewer.setSprite_image(bir1,4,3);
                 break;
             case R.id.thirdobject:
                 Log.v(TAG, "onClick");
                 assert viewer != null;
                 viewer.setSprite_image(fen,4,4);
+                break;
+            case R.id.cancelobject:
+                Log.v(TAG, "onClick");
+                assert viewer != null;
+                viewer.setSprite_image(null,0,0);
                 break;
         }
 
