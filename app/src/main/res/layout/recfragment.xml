@@ -9,8 +9,7 @@
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="83dp"
-        android:text="TextView" />
+        android:layout_height="83dp" />
 
     <ScrollView
         android:layout_width="match_parent"

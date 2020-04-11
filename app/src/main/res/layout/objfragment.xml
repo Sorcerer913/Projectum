@@ -6,15 +6,13 @@
     android:background="@color/Objfragment"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView2"
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="97dp"
-        android:text="TextView" />
+        android:layout_height="70dp" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -22,24 +20,20 @@
 
             <Button
                 android:id="@+id/firstobject"
-                android:layout_width="wrap_content"
+                android:layout_width="153dp"
                 android:layout_height="180dp"
-                android:layout_weight="1"
-                android:background="@drawable/download" />
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/secondobject"
-                android:layout_width="wrap_content"
+                android:layout_width="176dp"
                 android:layout_height="180dp"
-                android:layout_weight="1"
-                android:background="@drawable/rocket"
-                 />
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/thirdobject"
-                android:layout_width="wrap_content"
-                android:layout_height="180dp"
-                android:text="Button" />
+                android:layout_width="186dp"
+                android:layout_height="180dp" />
 
             <Button
                 android:id="@+id/forthobject"

@@ -5,13 +5,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.veryness.main.MainFragment;
+import com.example.veryness.workingfragments.AddingFragment;
+import com.example.veryness.workingfragments.MainFragment;
+import com.example.veryness.workingfragments.ObjectFragment;
+import com.example.veryness.workingfragments.RecordingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,14 +34,6 @@ good luck!! */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent homeIntent=new Intent(MainActivity.this,HomeActivity.class);
-                startActivity(homeIntent);
-                finish();
-            }
-        },0); */
         if(savedInstanceState == null){
             buildFragment(0);
         }else{
@@ -140,7 +133,7 @@ good luck!! */
                     i++;
                 }
             }
-            switch (v.getId()){
+            /*switch (v.getId()){
                 case R.id.objects:
                     buildFragment(0);
                     break;
@@ -150,7 +143,7 @@ good luck!! */
                 case R.id.records:
                     buildFragment(2);
                     break;
-            }
+            } */
 
 
 
@@ -161,7 +154,7 @@ good luck!! */
         switch (fragmentNum){
             case 0:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, MainFragment1.newInstance())
+                        .replace(R.id.container, MainFragment.newInstance())
                         .commitNow();
                 break;
 //            case 1:   //TODO: make fragment     ("CharacterChoosingFragment")
