@@ -15,6 +15,9 @@ import com.example.veryness.workingfragments.MainFragment;
 import com.example.veryness.workingfragments.ObjectFragment;
 import com.example.veryness.workingfragments.RecordingFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
 /* Hi rhere
@@ -30,7 +33,11 @@ good luck!! */
     Button button2;
     Button button3;
     public static int SPLASH_TIME_OUT=2000;
-    public MainFragment fragment=MainFragment.newInstance(1);
+    private List<Actor> items;
+    public AddingFragment funfragment=AddingFragment.newInstance();
+    public ObjectFragment objectFragment=ObjectFragment.newInstance();
+
+    public MainFragment fragment=MainFragment.newInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +48,7 @@ good luck!! */
        // }else{
             //TODO: savedInstanceState
        // }
-
+        items=new ArrayList<>();
         button1 = findViewById(R.id.objects);
         button2 = findViewById(R.id.addings);
         button3 = findViewById(R.id.records);
@@ -90,7 +97,6 @@ good luck!! */
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         switch (s){
             case("obj"):
-                ObjectFragment objectFragment=new ObjectFragment();
                 fragmentTransaction.add(R.id.fragmentContainer,objectFragment);
                 break;
 
@@ -100,7 +106,9 @@ good luck!! */
                 break;
 
             case("fun"):
-                AddingFragment funfragment=new AddingFragment();
+                items.clear();
+                items.addAll(fragment.getItems());
+                funfragment.setItems(items);
                 fragmentTransaction.add(R.id.fragmentContainer,funfragment);
                 break;
 
@@ -150,6 +158,7 @@ good luck!! */
 
         }
     };
+
 
     private void buildFragment(int fragmentNum){
         switch (fragmentNum){

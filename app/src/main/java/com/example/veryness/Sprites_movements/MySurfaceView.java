@@ -1,5 +1,6 @@
 package com.example.veryness.Sprites_movements;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -7,19 +8,24 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.veryness.R;
+import com.example.veryness.main.Actor;
+import com.example.veryness.workingfragments.MainFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback{
 
     Resources resources;
     Bitmap img, sprite_image; SurfaceThread thread;
     Paint paint;
+    MainFragment fragment;
     float currentx=0, currenty=0, stepx=0, stepy=0, touchx, touchy;
     float width, height;
     boolean touchevent=false;
@@ -28,9 +34,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     //Sprites sprite;
     ArrayList<Sprites> sprite = new ArrayList<Sprites>();
 
-    public MySurfaceView(Context context) {
+    @SuppressLint("WrongViewCast")
+    public MySurfaceView(Context context,MainFragment fragment) {
         super(context);
         getHolder().addCallback(this);
+        this.fragment=fragment;
         resources = getResources();
         img = BitmapFactory.decodeResource(resources, R.drawable.m);
         //sprite_image = BitmapFactory.decodeResource(resources, R.drawable.sprites);
@@ -39,10 +47,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         //sprite.add(0, new Sprites (this, sprite_image, currentx, currenty));
     }
 
+
     public void setSprite_image(Bitmap sprite_image,int columns,int rows) {
         this.sprite_image = sprite_image;
         this.columna=columns;
         this.rowa=rows;
+    }
+
+    public ArrayList<Sprites> getSprite() {
+        return sprite;
     }
 
     @Override
@@ -84,7 +97,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     }
                 }
             if(j%2==0){
-                sprite.add(j, new Sprites(this, sprite_image, touchx, touchy,columna,rowa));}
+                sprite.add(j, new Sprites(this, sprite_image, touchx, touchy,columna,rowa));
+            addItem(new Actor("actor",  Bitmap.createBitmap(sprite_image, 0, 0, sprite_image.getWidth() / columna, sprite_image.getHeight() / rowa),0,100));}
             else{sprite.add(null);}
             }
 
@@ -170,5 +184,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             if (currenty <=0 || currenty+height_1>=surfaceview.getHeight()) speedy=-speedy;
         }
     }
+
+    public void addItem(Actor item) {
+        fragment.addItem(item);
+    }
+
 
 }
