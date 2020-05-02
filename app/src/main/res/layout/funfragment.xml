@@ -11,15 +11,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/actors_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         tools:listitem="@layout/fun_item">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <LinearLayout
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-       >
-    </LinearLayout>
+        android:layout_height="192dp" />
+
 </LinearLayout>

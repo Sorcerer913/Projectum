@@ -17,16 +17,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.veryness.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import me.bendik.simplerangeview.SimpleRangeView;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+
+public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         View itemView;
         public Actor item;
         public EditText name;
-        public SeekBar timeline;
+        public SimpleRangeView timeline;
         public ImageView portrait;
         public List<ViewHolder> mPoints;
 
@@ -35,26 +39,18 @@ import java.util.List;
             super(itemView);
             this.cardView=(CardView)itemView.findViewById(R.id.carder);
             this.name=(EditText)itemView.findViewById(R.id.object_name);
-            this.timeline=(SeekBar)itemView.findViewById(R.id.time_appearance);
+            this.timeline=(SimpleRangeView) itemView.findViewById(R.id.time_appearance);
             this.portrait=(ImageView)itemView.findViewById(R.id.image_item);
             this.itemView=itemView;
         }
         public void onbindmodel(final Actor item){
             name.setText(item.getName());
             portrait.setImageBitmap(item.getPicture());
-            timeline.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            timeline.setStart(0);
+            timeline.setEnd(50);
+            timeline.setOnChangeRangeListener(new SimpleRangeView.OnChangeRangeListener() {
                 @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    item.setTime_disappearance(item.getTime_appearance()+progress);
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
+                public void onRangeChanged(@NotNull SimpleRangeView simpleRangeView, int i, int i1) {
 
                 }
             });

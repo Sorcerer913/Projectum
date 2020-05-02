@@ -8,7 +8,7 @@
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true"
     app:contentPadding="6dp"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     app:cardBackgroundColor="@color/Objfragment"
     app:cardCornerRadius="20dp">
 
@@ -20,6 +20,8 @@
         <ImageView
             android:id="@+id/image_item"
             android:layout_width="wrap_content"
+            android:minHeight="100dp"
+            android:minWidth="100dp"
             android:layout_height="wrap_content"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -27,16 +29,17 @@
             android:id="@+id/object_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Name" />
 
-        <SeekBar
+        <me.bendik.simplerangeview.SimpleRangeView
             android:id="@+id/time_appearance"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="10" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:count="300"
+            app:movable="true" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

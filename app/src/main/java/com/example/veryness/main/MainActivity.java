@@ -34,9 +34,9 @@ good luck!! */
     Button button3;
     public static int SPLASH_TIME_OUT=2000;
     private List<Actor> items;
+    public RecordingFragment recfragment=RecordingFragment.newInstance();
     public AddingFragment funfragment=AddingFragment.newInstance();
     public ObjectFragment objectFragment=ObjectFragment.newInstance();
-
     public MainFragment fragment=MainFragment.newInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +101,7 @@ good luck!! */
                 break;
 
             case("rec"):
-                RecordingFragment recordingFragment=new RecordingFragment();
-                fragmentTransaction.add(R.id.fragmentContainer,recordingFragment);
+                fragmentTransaction.add(R.id.fragmentContainer,recfragment);
                 break;
 
             case("fun"):
