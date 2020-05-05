@@ -1,5 +1,6 @@
 package com.example.veryness.main;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -17,6 +18,7 @@ import com.example.veryness.workingfragments.RecordingFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,10 +36,12 @@ good luck!! */
     Button button3;
     public static int SPLASH_TIME_OUT=2000;
     private List<Actor> items;
+    private ActionBar actionBar;
     public RecordingFragment recfragment=RecordingFragment.newInstance();
     public AddingFragment funfragment=AddingFragment.newInstance();
     public ObjectFragment objectFragment=ObjectFragment.newInstance();
     public MainFragment fragment=MainFragment.newInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,7 @@ good luck!! */
             //TODO: savedInstanceState
        // }
         items=new ArrayList<>();
+        actionBar=getSupportActionBar();
         button1 = findViewById(R.id.objects);
         button2 = findViewById(R.id.addings);
         button3 = findViewById(R.id.records);
@@ -101,6 +106,7 @@ good luck!! */
                 break;
 
             case("rec"):
+                recfragment.setMainFragment(fragment,actionBar);
                 fragmentTransaction.add(R.id.fragmentContainer,recfragment);
                 break;
 

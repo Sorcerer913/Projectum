@@ -19,6 +19,7 @@ import com.example.veryness.workingfragments.MainFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -98,7 +99,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 }
             if(j%2==0){
                 sprite.add(j, new Sprites(this, sprite_image, touchx, touchy,columna,rowa));
-            addItem(new Actor("actor",  Bitmap.createBitmap(sprite_image, 0, 0, sprite_image.getWidth() / columna, sprite_image.getHeight() / rowa),0,100));}
+            addItem(new Actor("actor",  Bitmap.createBitmap(sprite_image, 0, 0, sprite_image.getWidth() / columna, sprite_image.getHeight() / rowa),0,100, Objects.requireNonNull(fragment.getView()).getWidth()));}
             else{sprite.add(null);}
             }
 

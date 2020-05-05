@@ -44,6 +44,7 @@
 
     </FrameLayout>
 
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="73dp"
@@ -81,6 +82,14 @@
             android:text="Запись"
             android:textColor="#FFFFFFFF" />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/videorecording"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="902dp">
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 class SurfaceThread extends Thread {
-    SurfaceHolder Holder;
+    final SurfaceHolder Holder;
     MySurfaceView view;
     long Time;
     boolean runBool = true;
@@ -26,12 +26,12 @@ class SurfaceThread extends Thread {
             if (Time_ > 80) {
                 Time = Time0;
                 if(Holder!=null){
-                canvas = Holder.lockCanvas();
-                synchronized (Holder) {
-                    this.view.draw(canvas);
-                }
+                    canvas = Holder.lockCanvas();
+                    synchronized (Holder) {
+                        this.view.draw(canvas);
+                    }
 
-                if (canvas != null) Holder.unlockCanvasAndPost(canvas);}
+                    if (canvas != null) Holder.unlockCanvasAndPost(canvas);}
             }
         }
     }

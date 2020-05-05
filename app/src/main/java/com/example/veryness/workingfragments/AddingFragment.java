@@ -24,7 +24,7 @@ import java.util.List;
 public class AddingFragment extends Fragment {
     Button button;
     private List<Actor> items = new ArrayList<>();
-    public List<ViewHolder> mPoints;
+    public List<ViewHolder> mPoints= new ArrayList<>();
     private RecyclerView recyclerView;
     private AddingFragment fragment;
     private RecyclerView.LayoutManager layoutManager;
@@ -69,6 +69,18 @@ public class AddingFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        int j=0;
+        for(int i=0;i<mPoints.size();i++){
+            if (i<items.size()){
+           items.get(i).setName(mPoints.get(i).name.getText().toString());
+            }}
+
     }
 
     public class RecyclerViewObjectListAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -101,7 +113,8 @@ public class AddingFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.onbindmodel(items.get(position));
+           holder.onbindmodel(items.get(position));
+           mPoints.add(position,holder);
         }
 
         @Override

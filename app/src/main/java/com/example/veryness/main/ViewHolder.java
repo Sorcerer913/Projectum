@@ -2,11 +2,13 @@ package com.example.veryness.main;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -44,10 +46,13 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             this.itemView=itemView;
         }
         public void onbindmodel(final Actor item){
+            timeline.setStart(item.getTime_appearance());
+            timeline.setEnd(item.getTime_disappearance());
+            int height=LinearLayout.LayoutParams.WRAP_CONTENT;
+            LinearLayout.LayoutParams pa=new LinearLayout.LayoutParams(item.getWidth(),height);
+            cardView.setLayoutParams(pa);
             name.setText(item.getName());
             portrait.setImageBitmap(item.getPicture());
-            timeline.setStart(0);
-            timeline.setEnd(50);
             timeline.setOnChangeRangeListener(new SimpleRangeView.OnChangeRangeListener() {
                 @Override
                 public void onRangeChanged(@NotNull SimpleRangeView simpleRangeView, int i, int i1) {
@@ -55,12 +60,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 }
             });
 
-            name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    item.setName(name.getText().toString());
-                }
-            });
 
         }
         public void Insertmodel(Actor item){

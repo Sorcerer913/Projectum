@@ -1,5 +1,6 @@
 package com.example.veryness.workingfragments;
 
+import androidx.appcompat.app.ActionBar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.veryness.R;
+import com.example.veryness.main.VideoFragment;
 
 public class RecordingFragment extends Fragment {
    private ImageButton recordvideo;
    private RecordingFragment fragment;
+   private MainFragment mainFragment;
+   private ActionBar actionBar;
+   private VideoFragment videoFragment=VideoFragment.newInstance();
 
     public static RecordingFragment newInstance() {
         RecordingFragment fragment = new RecordingFragment();
@@ -23,6 +28,10 @@ public class RecordingFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setMainFragment(MainFragment fragment, ActionBar actionBar){this.mainFragment=fragment;
+    this.actionBar=actionBar;
     }
 
 
@@ -49,6 +58,15 @@ public class RecordingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recordvideo=(ImageButton)view.findViewById(R.id.recordvideo);
+        recordvideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                assert getFragmentManager() != null;
+                videoFragment.setFragmentofVideo(mainFragment,actionBar);
+                getFragmentManager().beginTransaction().add(R.id.videorecording,videoFragment).commit();
+
+            }
+        });
 
 
     }
