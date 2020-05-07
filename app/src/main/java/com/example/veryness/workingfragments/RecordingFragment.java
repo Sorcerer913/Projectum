@@ -63,6 +63,7 @@ public class RecordingFragment extends Fragment {
             public void onClick(View v) {
                 assert getFragmentManager() != null;
                 videoFragment.setFragmentofVideo(mainFragment,actionBar);
+                videoFragment.setFragment(videoFragment);
                 getFragmentManager().beginTransaction().add(R.id.videorecording,videoFragment).commit();
 
             }

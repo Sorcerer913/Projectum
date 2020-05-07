@@ -1,43 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/videor"
     android:background="#FFFFFF"
     tools:context=".main.VideoFragment">
 
 
     <FrameLayout
         android:id="@+id/fragmentofvideo"
+        android:layout_above="@id/butoons"
         android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content">
 
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/fragmentofvideo"
+        android:layout_height="wrap_content"
+        android:id="@+id/butoons"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:fabSize="mini"
+            android:layout_gravity="center"
+            android:src="@drawable/multimedia_option"
+            android:backgroundTint="#FFFFFF"
+            android:clickable="true" />
 
         <Button
             android:id="@+id/justmoveback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#FFFFFF"
             android:textStyle="bold|italic"
             android:layout_weight="1"
             android:text="Вернуть к началу" />
 
-        <Button
-            android:id="@+id/button3"
+        <ToggleButton
+            android:id="@+id/recbut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="bottom"
             android:background="#FF0000"
             android:textStyle="bold|italic"
             android:textColor="#FFFFFF"
-            android:text="Записать" />
+            android:textOff="Запись"
+            android:textOn="Остановить запись"
+            />
     </LinearLayout>
 
 </RelativeLayout>

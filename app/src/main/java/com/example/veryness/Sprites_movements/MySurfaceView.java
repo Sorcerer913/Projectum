@@ -48,8 +48,19 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         //sprite.add(0, new Sprites (this, sprite_image, currentx, currenty));
     }
 
+        public void setFragment(MainFragment fragment){
+        this.fragment=fragment;
+        }
 
-    public void setSprite_image(Bitmap sprite_image,int columns,int rows) {
+    public SurfaceThread getThread() {
+        return thread;
+    }
+
+    public void setThread(SurfaceThread thread) {
+        this.thread = thread;
+    }
+
+    public void setSprite_image(Bitmap sprite_image, int columns, int rows) {
         this.sprite_image = sprite_image;
         this.columna=columns;
         this.rowa=rows;
@@ -114,6 +125,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
     @Override
     public void draw(Canvas canvas) {
+
         super.draw(canvas);
         width = canvas.getWidth();
         height = canvas.getHeight();
@@ -130,7 +142,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
         for (int i=0; i<sprite.size(); i++){
             if(sprite.get(i)!=null){
-            sprite.get(i).draw(canvas);  } //direction 3 вверх 0 вниз 2вправо 1 влево
+            sprite.get(i).draw(canvas);  }//direction 3 вверх 0 вниз 2вправо 1 влево
         }
     }
 
@@ -154,6 +166,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             width_1 = image.getWidth() / columns;
             height_1 = image.getHeight() / rows;
         }
+
 
         void draw(Canvas canvas) {
             currentx += speedx;

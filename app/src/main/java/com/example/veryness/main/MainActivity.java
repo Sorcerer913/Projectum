@@ -1,21 +1,46 @@
 package com.example.veryness.main;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
+import android.media.MediaRecorder;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.veryness.R;
 import com.example.veryness.workingfragments.AddingFragment;
 import com.example.veryness.workingfragments.MainFragment;
 import com.example.veryness.workingfragments.ObjectFragment;
 import com.example.veryness.workingfragments.RecordingFragment;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +66,12 @@ good luck!! */
     public AddingFragment funfragment=AddingFragment.newInstance();
     public ObjectFragment objectFragment=ObjectFragment.newInstance();
     public MainFragment fragment=MainFragment.newInstance();
+
+    //record zone
+    private static final int REQUEST_PERMISSIONS = 10;
+    private static final String TAG = "MainActivity";
+    private static final int REQUEST_CODE = 1000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +127,72 @@ good luck!! */
             }
         });
 
+        if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.RECORD_AUDIO)+
+                ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)
+                !=
+        PackageManager.PERMISSION_GRANTED){
+            //When permission not granted
+            if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)||
+                    ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.RECORD_AUDIO)||
+                    ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)
+            ){
+                //create AlertDialog
+                AlertDialog.Builder builder= new AlertDialog.Builder(
+                        MainActivity.this
+                );
+                builder.setTitle("Дайте,пожалуйста,разрешения");
+                builder.setMessage("Приложению нужен доступ к памяти и к микрофону");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{
+                                        Manifest.permission.RECORD_AUDIO,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                },
+                                REQUEST_CODE);
+                    }
+                });
+                builder.setNegativeButton("Cancel",null);
+                AlertDialog alertDialog=builder.create();
+                alertDialog.show();
+
+            }else{
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{
+                                Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                        },
+                        REQUEST_CODE);
+
+            }
+
+        }else{
+            //When permissions are already granted
+            Toast.makeText(getApplicationContext(),"Permissions are alredy granted..",Toast.LENGTH_SHORT).show();
+
+        }
+
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==REQUEST_CODE){
+            if((grantResults.length>0)&&(grantResults[0]+grantResults[1]+grantResults[2]==PackageManager.PERMISSION_GRANTED)){
+                //permissions are granted
+                Toast.makeText(getApplicationContext(),"Permissions GRANTED..",Toast.LENGTH_SHORT).show();
+            }else{
+               // permissions are denied
+                Toast.makeText(getApplicationContext(),"Permissions DENIED..",Toast.LENGTH_SHORT).show();;
+
+            }
+        }
+    }
+
     public void addFragment(String s){
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
@@ -119,6 +215,10 @@ good luck!! */
 
         }
         fragmentTransaction.commit();
+    }
+
+    public void setMainFragment(MainFragment mainFragment){
+        this.fragment=mainFragment;
     }
     public void removeFragment(){
         FragmentManager fragmentManager=getSupportFragmentManager();
@@ -147,37 +247,11 @@ good luck!! */
                     i++;
                 }
             }
-            /*switch (v.getId()){
-                case R.id.objects:
-                    buildFragment(0);
-                    break;
-                case R.id.addings:
-                    buildFragment(1);
-                    break;
-                case R.id.records:
-                    buildFragment(2);
-                    break;
-            } */
 
 
 
         }
     };
 
-
-    private void buildFragment(int fragmentNum){
-        switch (fragmentNum){
-            case 0:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, MainFragment.newInstance())
-                        .commitNow();
-                break;
-//            case 1:   //TODO: make fragment     ("CharacterChoosingFragment")
-//                break;
-//            case 2:   //TODO: make fragment     ("ExportFragment")
-//                break;
-//            //TODO: make other fragments
-        }
-    }
 
 }

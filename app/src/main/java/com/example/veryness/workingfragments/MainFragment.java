@@ -1,6 +1,9 @@
 package com.example.veryness.workingfragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -20,7 +23,9 @@ import java.util.List;
 public class MainFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static Context context;
     private MainFragment fragment;
+    MySurfaceView mySurfaceView;
     private List<Actor> items = new ArrayList<>();
 
     private void setFragment(MainFragment fragment) {
@@ -41,8 +46,25 @@ public class MainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
        // Surfaceanim screen=new Surfaceanim(super.getContext());
         super.onCreate(savedInstanceState);
-        return new MySurfaceView(super.getContext(),fragment);
+        try{
+            boolean j=mySurfaceView.isActivated();
+        }catch (NullPointerException er){
+            mySurfaceView=new MySurfaceView(super.getContext(),fragment);
+        }
+        return mySurfaceView;
         //return inflater.inflate(R.layout.main_fragment, container, false);
+    }
+
+    public MySurfaceView getMySurfaceView() {
+        return mySurfaceView;
+    }
+
+    public void setItems(List<Actor> items) {
+        this.items = items;
+    }
+
+    public void setMySurfaceView(MySurfaceView mySurfaceView) {
+        this.mySurfaceView=mySurfaceView;
     }
 
     public void addItem(Actor item){
@@ -84,6 +106,7 @@ public class MainFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
+
 }
 
 
