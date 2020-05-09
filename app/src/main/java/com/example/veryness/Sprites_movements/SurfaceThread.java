@@ -25,7 +25,8 @@ import java.util.List;
 public class SurfaceThread extends Thread {
     final SurfaceHolder Holder;
     MySurfaceView view;
-    List<Bitmap> frames;
+   List<Bitmap> frames;
+    Bitmap BITI;
     long Time;
     int key;
     boolean runBool = true;
@@ -55,9 +56,6 @@ public class SurfaceThread extends Thread {
                         this.view.draw(canvas);
                         if(key==1){
                             frames.add(getBitmapFromView(this.view));
-                            frames.add(getBitmapFromView(this.view));
-                            frames.add(getBitmapFromView(this.view));
-                            frames.add(getBitmapFromView(this.view));
                             try {
                                 sleep(100);
                             } catch (InterruptedException e) {
@@ -80,21 +78,21 @@ public class SurfaceThread extends Thread {
 
 
 
-    public static Bitmap getBitmapFromView(View view) {
+    public static Bitmap getBitmapFromView(View v) {
         //Define a bitmap with the same size as the view
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        Bitmap returnedBitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(),Bitmap.Config.ARGB_8888);
         //Bind a canvas to it
-        Canvas canvas = new Canvas(returnedBitmap);
+        Canvas palit = new Canvas(returnedBitmap);
         //Get the view's background
-        Drawable bgDrawable =view.getBackground();
+        Drawable bgDrawable =v.getBackground();
         if (bgDrawable!=null)
             //has background drawable, then draw it on the canvas
-            bgDrawable.draw(canvas);
+            bgDrawable.draw(palit);
         else
             //does not have background drawable, then draw white background on the canvas
-            canvas.drawColor(Color.WHITE);
+            palit.drawColor(Color.WHITE);
         // draw the view on the canvas
-        view.draw(canvas);
+        v.draw(palit);
         //return the bitmap
         return returnedBitmap;
     }
@@ -104,5 +102,10 @@ public class SurfaceThread extends Thread {
 
     public List<Bitmap> getFrames() {
         return frames;
+    }
+
+
+    public int getKey() {
+        return key;
     }
 }

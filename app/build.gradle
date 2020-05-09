@@ -2,9 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-        configurations.all {
-            resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
-        }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
+    }
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.veryness"
@@ -29,6 +29,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'me.bendik.simplerangeview:simplerangeview:0.2.0'
+    implementation 'com.agrawalsuneet.androidlibs:dotsloader:1.4'
     implementation 'org.jcodec:jcodec:0.2.3'
     implementation 'org.jcodec:jcodec-android:0.2.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

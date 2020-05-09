@@ -54,6 +54,10 @@ public class RecordingFragment extends Fragment {
         setRetainInstance(true);
     }
 
+    public VideoFragment getVideoFragment() {
+        return videoFragment;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -63,11 +67,13 @@ public class RecordingFragment extends Fragment {
             public void onClick(View v) {
                 assert getFragmentManager() != null;
                 videoFragment.setFragmentofVideo(mainFragment,actionBar);
+                mainFragment.getMySurfaceView().isTouchable(false);
                 videoFragment.setFragment(videoFragment);
                 getFragmentManager().beginTransaction().add(R.id.videorecording,videoFragment).commit();
 
             }
         });
+
 
 
     }

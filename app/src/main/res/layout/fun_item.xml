@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/carder"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     app:cardBackgroundColor="@color/Objfragment"
@@ -39,11 +39,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:soundEffectsEnabled="false"
             app:count="300"
             app:end="50"
             app:movable="true"
             app:start="0" />
+
+        <ImageButton
+            android:id="@+id/deleteobject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#00FFFFFF"
+            app:srcCompat="@android:drawable/ic_delete" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

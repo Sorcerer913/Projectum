@@ -85,6 +85,7 @@ good luck!! */
        // }
         items=new ArrayList<>();
         actionBar=getSupportActionBar();
+
         button1 = findViewById(R.id.objects);
         button2 = findViewById(R.id.addings);
         button3 = findViewById(R.id.records);
@@ -126,7 +127,6 @@ good luck!! */
                 }
             }
         });
-
         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.RECORD_AUDIO)+
                 ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -194,6 +194,18 @@ good luck!! */
     }
 
     public void addFragment(String s){
+        Thread paste=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                fragment.getMySurfaceView().setAddingFragment(funfragment);
+                items.clear();
+                items.addAll(fragment.getItems());
+                Log.v("LOOOK_AT_THIS_SIZE_TO_FIND", String.valueOf(fragment.getItems().size()));
+                funfragment.setMainFragment(fragment);
+                funfragment.setItems(items);
+            }
+        });
+        paste.start();
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         switch (s){
@@ -207,9 +219,6 @@ good luck!! */
                 break;
 
             case("fun"):
-                items.clear();
-                items.addAll(fragment.getItems());
-                funfragment.setItems(items);
                 fragmentTransaction.add(R.id.fragmentContainer,funfragment);
                 break;
 

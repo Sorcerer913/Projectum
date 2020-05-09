@@ -2,10 +2,13 @@ package com.example.veryness.main;
 
 import android.Manifest;
 import android.app.AppComponentFactory;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.display.VirtualDisplay;
 import android.icu.text.TimeZoneFormat;
 import android.media.MediaRecorder;
@@ -34,6 +37,9 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -54,6 +60,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.LogRecord;
 
@@ -75,12 +82,19 @@ public class VideoFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private FloatingActionButton floatingActionButton;
+    private Dialog loading;
     private MainFragment fragmentofvideo;
     private MainFragment newInstance;
     private ActionBar actionBar;
     private VideoFragment videoFragment;
     private ToggleButton mToggleButton;
+    private ProgressBar loadbar;
+    private TextView waitingtext;
     private FragmentManager fragmentManager;
+    private Button startButton;
+    AndroidSequenceEncoder encoder;
+    SeekableByteChannel out;
+    LoadingDialog loadingDialog;
     public File file;
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE = 1000;
@@ -144,14 +158,87 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_video, container, false);
+        View view=inflater.inflate(R.layout.fragment_video, container, false);
+        mToggleButton=view.findViewById(R.id.recbut);
+        loadingDialog=new LoadingDialog();
+        mToggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mToggleButton.isChecked()) {
+                    fragmentofvideo.getMySurfaceView().getThread().setKey(1);
+
+                    // for (int i = 0; i < framers.size(); i++) {
+                    // Generate the image, for Android use Bitmap
+                    // Encode the image
+
+                    // }
+                    // Finalize the encoding, i.e. clear the buffers, write the header, etc.
+
+                } else {
+                    fragmentofvideo.getMySurfaceView().getThread().setKey(0);
+                    List <Bitmap> framers=fragmentofvideo.getMySurfaceView().getThread().getFrames();
+                    File filepath = new File(Environment.getExternalStorageDirectory().toString());
+
+                    Log.v("Bitmap_array", framers.toString());
+                    Log.v("EXTERNAL_STORAGE", filepath.getAbsolutePath());
+                    File dir = new File(filepath.getAbsolutePath() + "/Veryness_videos/");
+                    dir.mkdir();
+                    Log.v("NEW_DIRECTORY", dir.getAbsolutePath());
+                    file = new File(dir, "PROJECT_NAME" + ".mp4");
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Log.v("FILE_EXISTENCE", String.valueOf(file.exists()));
+                    //out = null;
+                    Toast.makeText(getContext(), "Picture saved", Toast.LENGTH_SHORT).show();
+                    Log.v("FILE_PATH", file.getAbsolutePath());
+                    Log.v("FILE_WRITABLE", String.valueOf(file.canWrite()));
+                    //Permissions are denying,
+
+                    // for Android use: AndroidSequenceEncoder
+                    try {
+                        out = (SeekableByteChannel) NIOUtils.writableChannel(file);
+                        Log.v("Something_happened", out.toString());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        encoder = new AndroidSequenceEncoder(out, Rational.R(25, 1));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    for(int i=0;i<framers.size();i++){
+                        try {
+                            encoder.encodeImage(framers.get(i));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    try {
+                        assert encoder != null;
+                        encoder.finish();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    NIOUtils.closeQuietly(out);
+                    //ArrayList<Bitmap> framers = (ArrayList<Bitmap>) fragmentofvideo.getMySurfaceView().getThread().getFrames();
+
+
+                }
+            }});
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         floatingActionButton=view.findViewById(R.id.floatingActionButton);
-        final LoadingDialog loadingDialog=new LoadingDialog(videoFragment);
+        startButton=view.findViewById(R.id.justmoveback);
+
         //((MainActivity) getActivity()).setVideoFragment(videoFragment);
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.remove(fragmentofvideo);
@@ -160,65 +247,17 @@ public class VideoFragment extends Fragment {
         ft.commit();
         assert actionBar != null;
         actionBar.hide();
-        mToggleButton=view.findViewById(R.id.recbut);
-        //recording
-        mToggleButton.setOnClickListener(new View.OnClickListener() {
+        startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mToggleButton.isChecked()) {
-                    fragmentofvideo.getMySurfaceView().getThread().setKey(1);
-                } else {
-                    fragmentofvideo.getMySurfaceView().getThread().setKey(0);
-                    ArrayList<Bitmap> framers = (ArrayList<Bitmap>) fragmentofvideo.getMySurfaceView().getThread().getFrames();
-                    Log.v("Bitmap_array", framers.toString());
-                    File filepath = new File(Environment.getExternalStorageDirectory().toString());
-                    Log.v("EXTERNAL_STORAGE", filepath.getAbsolutePath());
-                    File dir = new File(filepath.getAbsolutePath() + "/Veryness_videos/");
-                    dir.mkdir();
-                    Log.v("NEW_DIRECTORY", dir.getAbsolutePath());
-                    file = new File(dir, "test_three"+ ".mp4");
-                    try {
-                        file.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Log.v("FILE_EXISTENCE", String.valueOf(file.exists()));
-                    SeekableByteChannel out = null;
-                    Toast.makeText(getContext(), "Picture saved", Toast.LENGTH_SHORT).show();
-                    Log.v("FILE_PATH", file.getAbsolutePath());
-                    Log.v("FILE_WRITABLE", String.valueOf(file.canWrite()));
-
-                   try {
-                        try {
-                            out = (SeekableByteChannel) NIOUtils.writableChannel(file);
-                            //Permissions are denying,
-                            Log.v("Something_happened", out.toString());
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                        // for Android use: AndroidSequenceEncoder
-                        AndroidSequenceEncoder encoder;
-                        encoder = new AndroidSequenceEncoder(out, Rational.R(25, 1));
-                        for (int i = 0; i < framers.size(); i++) {
-                            // Generate the image, for Android use Bitmap
-                            // Encode the image
-                            try {
-                                encoder.encodeImage(framers.get(i));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        // Finalize the encoding, i.e. clear the buffers, write the header, etc.
-                        encoder.finish();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        NIOUtils.closeQuietly(out);
-                    }
-                }
+                fragmentofvideo.getMySurfaceView().setStart_state(1);
+                fragmentofvideo.getMySurfaceView().finishTimer();
+               // fragmentofvideo.getMySurfaceView().getCountDownTimer().onFinish();
             }
         });
+
+        //recording
+
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +266,7 @@ public class VideoFragment extends Fragment {
                 sd.remove(newInstance);
                 MainFragment returnfragment=recreateFragment(newInstance);
                 returnfragment.getMySurfaceView().setFragment(returnfragment);
+                returnfragment.getMySurfaceView().isTouchable(true);
                 sd.add(R.id.container,returnfragment);
                 sd.remove(videoFragment);
                 sd.commit();
@@ -236,6 +276,7 @@ public class VideoFragment extends Fragment {
         });
         //fragmentManager.beginTransaction().add(R.id.fragmentofvideo,fragmentofvideo).addToBackStack(null).commit();
     }
+
 
 
 

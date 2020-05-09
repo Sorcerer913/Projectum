@@ -9,15 +9,19 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.veryness.R;
 import com.example.veryness.main.Actor;
+import com.example.veryness.workingfragments.AddingFragment;
 import com.example.veryness.workingfragments.MainFragment;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,11 +31,32 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     Bitmap img, sprite_image; SurfaceThread thread;
     Paint paint;
     MainFragment fragment;
+    AddingFragment addingFragment;
     float currentx=0, currenty=0, stepx=0, stepy=0, touchx, touchy;
     float width, height;
     boolean touchevent=false;
+    boolean mTimerRunning;
+
+    public CountDownTimer getCountDownTimer() {
+        return countDownTimer;
+    }
+
+    public void setCountDownTimer(CountDownTimer countDownTimer) {
+        this.countDownTimer = countDownTimer;
+    }
+
+    private CountDownTimer countDownTimer;
+    int count=0;
     int columna;
+    int touch_count=0;
+    int start_state;
+    private static final long  START_TIME_IN_MILES=300000;
+    private long  mTimeleftinmills;
     int rowa;
+    int st=0;
+    boolean touchable=true;
+    LinkedList<CountDownTimer> timers=new LinkedList<>();
+    LinkedList<Integer> counts=new LinkedList<>();
     //Sprites sprite;
     ArrayList<Sprites> sprite = new ArrayList<Sprites>();
 
@@ -41,6 +66,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         getHolder().addCallback(this);
         this.fragment=fragment;
         resources = getResources();
+        start_state=0;
+
         img = BitmapFactory.decodeResource(resources, R.drawable.m);
         //sprite_image = BitmapFactory.decodeResource(resources, R.drawable.sprites);
         setFocusable(true);
@@ -59,7 +86,12 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public void setThread(SurfaceThread thread) {
         this.thread = thread;
     }
-
+    public void setStart_state(int state){
+        this.start_state=state;
+    }
+    public void setAddingFragment(AddingFragment addingFragment){
+                this.addingFragment=addingFragment;
+    }
     public void setSprite_image(Bitmap sprite_image, int columns, int rows) {
         this.sprite_image = sprite_image;
         this.columna=columns;
@@ -96,39 +128,54 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public boolean onTouchEvent(MotionEvent event) { //информация о касании event
         int j;
-        if (event.getAction() == MotionEvent.ACTION_DOWN){
-            touchevent = true;
-            touchx = event.getX();
-            touchy = event.getY();
-            j=sprite.size();
-            if(sprite_image!=null){
-           // for (j=0; j<sprite.size(); j++){
-                if (j != 0) {
-                    if(sprite.get(j-1)!=null){
-                        sprite.get(j-1).setTarget(touchx, touchy);//}
+        if(touchable) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                touchevent = true;
+                touchx = event.getX();
+                touchy = event.getY();
+                j = sprite.size();
+                if (touch_count == 0) {
+                    createTimer();
+                }
+                if (sprite_image != null) {
+                    // for (j=0; j<sprite.size(); j++){
+                    if ((j != 0) && touch_count % 2 != 0) {
+                        if (sprite.get(j - 1) != null) {
+                            sprite.get(j - 1).setTarget(touchx, touchy);//}
+                        }
+                    }
+                    if (touch_count % 2 == 0) {
+                        addItem(new Actor("actor", Bitmap.createBitmap(sprite_image, 0, 0, sprite_image.getWidth() / columna, sprite_image.getHeight() / rowa), 0, 300, Objects.requireNonNull(fragment.getView()).getWidth()));
+                        sprite.add(j, new Sprites(this, sprite_image, touchx, touchy, columna, rowa, touchx, touchy));
+                        addingFragment.setItems(fragment.getItems());
+                        touch_count++;
+                    } else {
+                        touch_count++;
                     }
                 }
-            if(j%2==0){
-                sprite.add(j, new Sprites(this, sprite_image, touchx, touchy,columna,rowa));
-            addItem(new Actor("actor",  Bitmap.createBitmap(sprite_image, 0, 0, sprite_image.getWidth() / columna, sprite_image.getHeight() / rowa),0,100, Objects.requireNonNull(fragment.getView()).getWidth()));}
-            else{sprite.add(null);}
-            }
 
             /*
             stepx = (touchx - currentx)/width*100;// расчет скоростей
             // (float) Math.sqrt((touchy-currenty)*(touchy-currenty)+(touchx-currentx)*(touchx-currentx));
             stepy = (touchy - currenty)/height*100;//(float) Math.sqrt((touchy-currenty)*(touchy-currenty)+(touchx-currentx)*(touchx-currentx));
         */
-        }
+            }
 
-        return true;
+            return true;
+        }else{
+            return true;
+        }
+    }
+
+    public void isTouchable(boolean touchable){
+        this.touchable=touchable;
     }
     @Override
     public void draw(Canvas canvas) {
 
         super.draw(canvas);
-        width = canvas.getWidth();
-        height = canvas.getHeight();
+        width = getWidth();
+        height = getHeight();
         canvas.drawARGB(255, 255, 255, 255);
         /*if (!touchevent){
             currentx = width/2 - img.getWidth()/2;
@@ -140,10 +187,71 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         canvas.drawBitmap(img, currentx, currenty, paint);
         checkWall();*/
 
-        for (int i=0; i<sprite.size(); i++){
-            if(sprite.get(i)!=null){
-            sprite.get(i).draw(canvas);  }//direction 3 вверх 0 вниз 2вправо 1 влево
+        for (int i=0; i<sprite.size(); i++) {
+            if(counts.size()!=0){
+            if(addingFragment.getItems().size()==sprite.size()) {
+                    if ((addingFragment.getItems().get(i) != null) && (addingFragment.getItems().size() != 0)) {
+                        sprite.get(i).timeappearance = addingFragment.getItems().get(i).getTime_appearance();
+                        sprite.get(i).timedisappearance = addingFragment.getItems().get(i).getTime_disappearance();
+                        if (sprite.get(i) != null) {
+                            if (start_state == 1) {
+                                sprite.get(i).startOption(sprite.get(i));
+                            }
+                            if ((sprite.get(i).timeappearance <= counts.getLast()) && (sprite.get(i).timedisappearance >=counts.getLast())) {
+                                sprite.get(i).draw(canvas);
+                                Log.v("Time_APPEarance", String.valueOf(sprite.get(i).timeappearance));
+                                Log.v("Time_DISAPPEarance", String.valueOf(sprite.get(i).timedisappearance));
+                            } //direction 3 вверх 0 вниз 2вправо 1 влево
+                        }
+                    }
+            }else{
+                addingFragment.getItems().add(null);
+            }
+        start_state=0;
+
+        if(counts.getLast()==300){
+            createTimer();
         }
+        Log.v("TIMER", String.valueOf(counts.getLast()));}}
+    }
+
+    public  long getStartTimeInMiles() {
+        return START_TIME_IN_MILES;
+    }
+
+
+    public long getmTimeleftinmills() {
+        return mTimeleftinmills;
+    }
+
+    public void setmTimeleftinmills(long mTimeleftinmills) {
+        this.mTimeleftinmills = mTimeleftinmills;
+    }
+
+    public void createTimer( ){
+        countDownTimer=new CountDownTimer(mTimeleftinmills,1000) {
+            int counter;
+            @Override
+            public void onTick(long millisUntilFinished) {
+                counts.addLast(counter);
+               mTimeleftinmills=millisUntilFinished;
+               counter=(int)(START_TIME_IN_MILES-millisUntilFinished)/1000;
+
+               if(counter==(START_TIME_IN_MILES)/1000-2){
+                   onFinish();
+               }}
+            @Override
+            public void onFinish() {
+                mTimeleftinmills=START_TIME_IN_MILES;
+                mTimerRunning=false;
+                st=0;
+                createTimer();
+            }
+        }.start();
+        mTimerRunning=true;
+    }
+    public void finishTimer( ){
+      createTimer();
     }
 
     public class Sprites {
@@ -151,20 +259,32 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         Bitmap image;
         float currentx, currenty, targetx, targety, speedx = 0, speedy = 0;
         int columns, rows , width_1, height_1;
+        float Startspeedx,Startspeedy;
+        float startX,startY;
+        int timeappearance,timedisappearance;
         Paint paint= new Paint();
         int currentFrame=0, direction=0;
         int cadrx, cadry;
 
 
-        public Sprites (MySurfaceView surfaceview, Bitmap image, float x, float y,int columns,int rows) {
+        public Sprites (MySurfaceView surfaceview, Bitmap image, float x, float y,int columns,int rows,float startX,float startY) {
             this.surfaceview = surfaceview;
             this.image = image;
             currentx = x;
             currenty = y;
             this.columns=columns;
             this.rows=rows;
+            this.startX=startX;
+            this.startY=startY;
             width_1 = image.getWidth() / columns;
             height_1 = image.getHeight() / rows;
+        }
+
+        public void startOption(Sprites sprite){
+            sprite.currentx=sprite.startX;
+            sprite.currenty=sprite.startY;
+            sprite.speedx=sprite.Startspeedx;
+            sprite.speedy=sprite.Startspeedy;
         }
 
 
@@ -186,6 +306,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             this.targety = targety;
             speedx = (targetx - currentx) / surfaceview.getWidth() * 50;
             speedy = (targety - currenty) / surfaceview.getHeight() * 50;
+            Startspeedx=(targetx - startX) / surfaceview.getWidth() * 50;
+            Startspeedy=(targety - startY) / surfaceview.getWidth() * 50;
             if (speedy/speedx>1 ) {direction=3;}
             else {if (speedy/speedx<1 & speedy/speedx>-1) direction=0;
             else {
