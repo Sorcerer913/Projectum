@@ -18,6 +18,7 @@ import com.example.veryness.main.VideoFragment;
 public class RecordingFragment extends Fragment {
    private ImageButton recordvideo;
    private RecordingFragment fragment;
+   private ImageButton res;
    private MainFragment mainFragment;
    private ActionBar actionBar;
    private VideoFragment videoFragment=VideoFragment.newInstance();
@@ -62,6 +63,7 @@ public class RecordingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recordvideo=(ImageButton)view.findViewById(R.id.recordvideo);
+        res=(ImageButton)view.findViewById(R.id.restart);
         recordvideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +75,13 @@ public class RecordingFragment extends Fragment {
 
             }
         });
-
+        res.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainFragment.getMySurfaceView().setStart_state(1);
+                mainFragment.getMySurfaceView().finishTimer();
+            }
+        });
 
 
     }

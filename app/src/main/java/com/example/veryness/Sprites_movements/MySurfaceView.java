@@ -20,10 +20,13 @@ import com.example.veryness.main.Actor;
 import com.example.veryness.workingfragments.AddingFragment;
 import com.example.veryness.workingfragments.MainFragment;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+
+import static android.os.Looper.prepare;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -36,16 +39,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     float width, height;
     boolean touchevent=false;
     boolean mTimerRunning;
+    CountDownTimer countDownTimer;
 
-    public CountDownTimer getCountDownTimer() {
-        return countDownTimer;
-    }
-
-    public void setCountDownTimer(CountDownTimer countDownTimer) {
-        this.countDownTimer = countDownTimer;
-    }
-
-    private CountDownTimer countDownTimer;
     int count=0;
     int columna;
     int touch_count=0;
@@ -55,10 +50,12 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     int rowa;
     int st=0;
     boolean touchable=true;
+    LinkedList <LinkedList> coders=new LinkedList<LinkedList>();
     LinkedList<CountDownTimer> timers=new LinkedList<>();
-    LinkedList<Integer> counts=new LinkedList<>();
+    LinkedList<Integer> counts=new LinkedList<Integer>();
     //Sprites sprite;
     ArrayList<Sprites> sprite = new ArrayList<Sprites>();
+    int povt=0;
 
     @SuppressLint("WrongViewCast")
     public MySurfaceView(Context context,MainFragment fragment) {
@@ -136,6 +133,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 j = sprite.size();
                 if (touch_count == 0) {
                     createTimer();
+                    Log.v("CREATED","true");
                 }
                 if (sprite_image != null) {
                     // for (j=0; j<sprite.size(); j++){
@@ -188,31 +186,34 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         checkWall();*/
 
         for (int i=0; i<sprite.size(); i++) {
-            if(counts.size()!=0){
+            if(coders.size()!=0){
             if(addingFragment.getItems().size()==sprite.size()) {
                     if ((addingFragment.getItems().get(i) != null) && (addingFragment.getItems().size() != 0)) {
                         sprite.get(i).timeappearance = addingFragment.getItems().get(i).getTime_appearance();
                         sprite.get(i).timedisappearance = addingFragment.getItems().get(i).getTime_disappearance();
                         if (sprite.get(i) != null) {
-                            if (start_state == 1) {
-                                sprite.get(i).startOption(sprite.get(i));
-                            }
-                            if ((sprite.get(i).timeappearance <= counts.getLast()) && (sprite.get(i).timedisappearance >=counts.getLast())) {
+                            if ((sprite.get(i).timeappearance <=(int)coders.getLast().getLast()) && (sprite.get(i).timedisappearance >=(int)coders.getLast().getLast())){
+                                if (start_state == 1) {
+                                    sprite.get(i).startOption(sprite.get(i));
+                                }
                                 sprite.get(i).draw(canvas);
                                 Log.v("Time_APPEarance", String.valueOf(sprite.get(i).timeappearance));
                                 Log.v("Time_DISAPPEarance", String.valueOf(sprite.get(i).timedisappearance));
+                                Log.v("TIMER", String.valueOf((int)coders.getLast().getLast()));
                             } //direction 3 вверх 0 вниз 2вправо 1 влево
                         }
                     }
             }else{
                 addingFragment.getItems().add(null);
             }
-        start_state=0;
-
-        if(counts.getLast()==300){
-            createTimer();
+        if((int)coders.getLast().getLast()==300){
+           // counts.clear();
+            povt++;
+            countDownTimer.onFinish();
+            mTimeleftinmills=START_TIME_IN_MILES;
         }
-        Log.v("TIMER", String.valueOf(counts.getLast()));}}
+ }}
+        start_state=0;
     }
 
     public  long getStartTimeInMiles() {
@@ -229,14 +230,21 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void createTimer( ){
-        countDownTimer=new CountDownTimer(mTimeleftinmills,1000) {
-            int counter;
-            @Override
-            public void onTick(long millisUntilFinished) {
-                counts.addLast(counter);
-               mTimeleftinmills=millisUntilFinished;
-               counter=(int)(START_TIME_IN_MILES-millisUntilFinished)/1000;
 
+        //coders.add(povt,crot);
+            countDownTimer=new CountDownTimer(mTimeleftinmills,1000) {
+            int counter;
+            LinkedList<Integer>crot=new LinkedList<>();
+            int cr=povt;
+           @Override
+            public void onTick(long millisUntilFinished) {
+               mTimeleftinmills=millisUntilFinished;
+               counter=(int)(START_TIME_IN_MILES-mTimeleftinmills)/1000;
+               crot.add(counter);
+               if(!coders.contains(crot)){
+                   coders.addLast(crot);
+               }
+               // counts.add(counter);
                if(counter==(START_TIME_IN_MILES)/1000-2){
                    onFinish();
                }}
@@ -244,14 +252,24 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             public void onFinish() {
                 mTimeleftinmills=START_TIME_IN_MILES;
                 mTimerRunning=false;
+                povt++;
                 st=0;
-                createTimer();
+                try{
+                    createTimer();
+                }catch (Exception er){
+                    er.printStackTrace();
+                }
+
             }
         }.start();
+       ;
         mTimerRunning=true;
     }
     public void finishTimer( ){
-      createTimer();
+        povt++;
+        countDownTimer.onFinish();
+        mTimeleftinmills=START_TIME_IN_MILES;
+      //counts= new LinkedList<Integer>();
     }
 
     public class Sprites {
