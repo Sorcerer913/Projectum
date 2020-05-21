@@ -22,7 +22,10 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -34,6 +37,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.veryness.R;
+import com.example.veryness.Sprites_movements.MySurfaceView;
 import com.example.veryness.workingfragments.AddingFragment;
 import com.example.veryness.workingfragments.MainFragment;
 import com.example.veryness.workingfragments.ObjectFragment;
@@ -48,10 +52,10 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
 /* Hi rhere
-It is me, you classmate
+It is me, your classmate
 Do you remember me......shit
 Ok,then,we have some problens
-I have adde a few buttond in fragments
+I have add a few buttons in fragments
 Your goal is to make this buttons work
 they must activate your fragment SurfaceView when you press on them
 good luck!! */
@@ -60,7 +64,7 @@ good luck!! */
     Button button2;
     Button button3;
     public static int SPLASH_TIME_OUT=2000;
-    private List<Actor> items;
+    private List<Actor> items=new ArrayList<>();
     private ActionBar actionBar;
     public RecordingFragment recfragment=RecordingFragment.newInstance();
     public AddingFragment funfragment=AddingFragment.newInstance();
@@ -78,12 +82,6 @@ good luck!! */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitNow();
-       // if(savedInstanceState == null){
-            //buildFragment(0);
-       // }else{
-            //TODO: savedInstanceState
-       // }
-        items=new ArrayList<>();
         actionBar=getSupportActionBar();
 
         button1 = findViewById(R.id.objects);
@@ -198,7 +196,8 @@ good luck!! */
             @Override
             public void run() {
                 fragment.getMySurfaceView().setAddingFragment(funfragment);
-                items.clear();
+                if (items.size()!=0){
+                items.clear();}
                 items.addAll(fragment.getItems());
                 Log.v("LOOOK_AT_THIS_SIZE_TO_FIND", String.valueOf(fragment.getItems().size()));
                 funfragment.setMainFragment(fragment);
@@ -262,5 +261,33 @@ good luck!! */
         }
     };
 
+ /*   @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+            if(savedInstanceState.getParcelableArrayList("actors") != null) {
+                items.addAll(Objects.requireNonNull(savedInstanceState.<Actor>getParcelableArrayList("actors")));
+                Log.v("LOOOK_on item", items.get(0).getName());
+                Log.v("LOOOK_AT_THIS_SIZE_TO_FIND_Inst", String.valueOf(savedInstanceState.<Actor>getParcelableArrayList("actors")));
+                fragment.setItems(items);
+                funfragment.setItems(items);
+                Log.v("CHECKER", String.valueOf(funfragment.getItems().size()));
+                fragment.getMySurfaceView().setAddingFragment(funfragment);
 
+        }
+        if(savedInstanceState.getParcelableArrayList("sprites") != null) {
+            Log.v("LOOOK_AT_THIS_SIZE_TO_FIND_InstSprites", String.valueOf(savedInstanceState.<Actor>getParcelableArrayList("sprites")));
+            fragment.getMySurfaceView().setSprite(savedInstanceState.<MySurfaceView.Sprites>getParcelableArrayList("sprites"));
+            fragment.getMySurfaceView().createTimer();
+            fragment.getMySurfaceView().setStart_state(1);
+        }
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("actors", (ArrayList<? extends Parcelable>) funfragment.getItems());
+        outState.putParcelableArrayList("sprites",fragment.getMySurfaceView().getSprite());
+    } */
 }

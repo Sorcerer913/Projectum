@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -46,6 +47,7 @@ public class MainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
        // Surfaceanim screen=new Surfaceanim(super.getContext());
         super.onCreate(savedInstanceState);
+
         try{
             boolean j=mySurfaceView.isActivated();
         }catch (NullPointerException er){
@@ -78,6 +80,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+
         //m
         // TODO: Use the ViewModel
     }
@@ -105,7 +109,15 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList("items", (ArrayList<? extends Parcelable>) items);
+    }
+
+
 
 }
 

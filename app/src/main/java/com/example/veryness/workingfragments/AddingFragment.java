@@ -1,6 +1,7 @@
 package com.example.veryness.workingfragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,7 @@ public class AddingFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.actors_list);
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        assert savedInstanceState != null;
         mAdapter = new RecyclerViewObjectListAdapter(items);
         recyclerView.setAdapter(mAdapter);
     }
@@ -127,29 +129,31 @@ public class AddingFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-            if (items.get(position) != null) {
-                holder.onbindmodel(items.get(position));
-                Log.v("ITEMS_SIZE_BEFORECLICK", String.valueOf(items.size()));
-                mPoints.add(position, holder);
-                mPoints.set(position, holder);
-                holder.delobj.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        items.remove(position);
-                        mainFragment.getMySurfaceView().getSprite().remove(position);
-                        mPoints.remove(holder);
-                        mainFragment.getItems().clear();
-                        for(int i=0;i<items.size();i++){
-                            mainFragment.addItem(items.get(i));
-                        }
-                        ((MainActivity) Objects.requireNonNull(getActivity())).setMainFragment(mainFragment);
-                        mAdapter=new RecyclerViewObjectListAdapter(items);
-                        Log.v("ITEMS_SIZE_AFTER", String.valueOf(items.size()));
-                        recyclerView.setAdapter(mAdapter);
+            if (items.size() != 0){
+                if (items.get(position) != null) {
+                    holder.onbindmodel(items.get(position));
+                    Log.v("ITEMS_SIZE_BEFORECLICK", String.valueOf(items.size()));
+                    mPoints.add(position, holder);
+                    mPoints.set(position, holder);
+                    holder.delobj.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            items.remove(position);
+                            mainFragment.getMySurfaceView().getSprite().remove(position);
+                            mPoints.remove(holder);
+                            mainFragment.getItems().clear();
+                            for (int i = 0; i < items.size(); i++) {
+                                mainFragment.addItem(items.get(i));
+                            }
+                            ((MainActivity) Objects.requireNonNull(getActivity())).setMainFragment(mainFragment);
+                            mAdapter = new RecyclerViewObjectListAdapter(items);
+                            Log.v("ITEMS_SIZE_AFTER", String.valueOf(items.size()));
+                            recyclerView.setAdapter(mAdapter);
 
                         }
-                });
-            }
+                    });
+                }
+        }
         }
 
 
@@ -163,6 +167,21 @@ public class AddingFragment extends Fragment {
 
         }
 
+
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList("items", (ArrayList<? extends Parcelable>) items);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState!=null){
+          items=savedInstanceState.getParcelableArrayList("items");
+        }
 
     }
 }

@@ -1,10 +1,13 @@
 package com.example.veryness.main;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -57,6 +60,12 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 cardView.setLayoutParams(pa);
                 name.setText(item.getName());
                 portrait.setImageBitmap(item.getPicture());
+                name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        item.setName(name.getText().toString());
+                    }
+                });
                 timeline.setOnChangeRangeListener(new SimpleRangeView.OnChangeRangeListener() {
                     @Override
                     public void onRangeChanged(@NotNull SimpleRangeView simpleRangeView, int i, int i1) {
@@ -65,9 +74,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                     }
                 });
             }
-
-        }
-        public void Insertmodel(Actor item){
 
         }
     }

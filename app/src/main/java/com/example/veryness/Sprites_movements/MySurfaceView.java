@@ -9,7 +9,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -21,6 +24,7 @@ import com.example.veryness.workingfragments.AddingFragment;
 import com.example.veryness.workingfragments.MainFragment;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,8 +99,22 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         this.rowa=rows;
     }
 
+    public void setCountDownTimer(CountDownTimer countDownTimer){
+        this.countDownTimer=countDownTimer;
+    }
+    public void setCoders(Parcelable[] cd){
+        LinkedList crot=new LinkedList();
+        for(int i=0;i<cd.length;i++){
+            crot.add(cd[i]);
+        }
+        coders.addLast(crot);
+    }
+
     public ArrayList<Sprites> getSprite() {
         return sprite;
+    }
+    public void setSprite(ArrayList<Sprites> sprite) {
+        this.sprite=sprite;
     }
 
     @Override
@@ -272,7 +290,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
       //counts= new LinkedList<Integer>();
     }
 
-    public class Sprites {
+    public class Sprites implements Parcelable {
         MySurfaceView surfaceview;
         Bitmap image;
         float currentx, currenty, targetx, targety, speedx = 0, speedy = 0;
@@ -297,6 +315,43 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             width_1 = image.getWidth() / columns;
             height_1 = image.getHeight() / rows;
         }
+
+        protected Sprites(Parcel in) {
+            Bundle bundle=in.readBundle(getClass().getClassLoader());
+            assert bundle != null;
+            image = bundle.getParcelable("image");
+            //дописать как класс Актёров
+            // засунуть в savedinstance
+            currentx = bundle.getFloat("currentx");
+            currenty = bundle.getFloat("currenty");
+            targetx = bundle.getFloat("targetx");
+            targety = bundle.getFloat("targety");
+            speedx = bundle.getFloat("speedx");
+            speedy = bundle.getFloat("speedy");
+            columns = bundle.getInt("columns");
+            rows = bundle.getInt("row");
+            Startspeedx = bundle.getFloat("Startspeedx");
+            Startspeedy = bundle.getFloat("Startspeedy");
+            startX= bundle.getFloat("startX");
+            startY = bundle.getFloat("startY");
+            timeappearance = bundle.getInt("timeappearance");
+            timedisappearance = bundle.getInt("timedisappearance");
+            currentFrame = bundle.getInt("currentFrame");
+            direction= bundle.getInt("direction");
+        }
+
+
+        public final Creator<Sprites> CREATOR = new Creator<Sprites>() {
+            @Override
+            public Sprites createFromParcel(Parcel in) {
+                return new Sprites(in);
+            }
+
+            @Override
+            public Sprites[] newArray(int size) {
+                return new Sprites[size];
+            }
+        };
 
         public void startOption(Sprites sprite){
             sprite.currentx=sprite.startX;
@@ -336,6 +391,34 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         void checkWall(){
             if (currentx <=0 || currentx+width_1>=surfaceview.getWidth()) speedx=-speedx;
             if (currenty <=0 || currenty+height_1>=surfaceview.getHeight()) speedy=-speedy;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            Bundle bundle=new Bundle();
+            bundle.putParcelable("image",image);
+            bundle.putFloat("currentx",currentx);
+            bundle.putFloat("currenty",currenty);
+            bundle.putFloat("targetx",targetx);
+            bundle.putFloat("targety",targety);
+            bundle.putFloat("speedx",speedx);
+            bundle.putFloat("speedy",speedy);
+            bundle.putInt("columns",columns);
+            bundle.putInt("rows",rows);
+            bundle.putFloat("Startspeedx",Startspeedx);
+            bundle.putFloat("Startspeedy",Startspeedy);
+            bundle.putFloat("startX",startX);
+            bundle.putFloat("startY",startY);
+            bundle.putInt("timeappearance",timeappearance);
+            bundle.putInt("timedisappearance",timedisappearance);
+            bundle.putInt("currentFrame",currentFrame);
+            bundle.putInt("direction",direction);
+            dest.writeBundle(bundle);
         }
     }
 

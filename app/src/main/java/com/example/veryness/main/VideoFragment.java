@@ -177,11 +177,11 @@ public class VideoFragment extends Fragment {
                 } else {
                     fragmentofvideo.getMySurfaceView().getThread().setKey(0);
                     List <Bitmap> framers=fragmentofvideo.getMySurfaceView().getThread().getFrames();
-                    File filepath = new File(Environment.getExternalStorageDirectory().toString());
-
+                    //File filepath = new File(Environment.getExternalStorageDirectory().toString());
+                    File filepath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString());
                     Log.v("Bitmap_array", framers.toString());
                     Log.v("EXTERNAL_STORAGE", filepath.getAbsolutePath());
-                    File dir = new File(filepath.getAbsolutePath() + "/Veryness_videos/");
+                    File dir = new File(filepath.getAbsolutePath() + "");
                     dir.mkdir();
                     Log.v("NEW_DIRECTORY", dir.getAbsolutePath());
                     file = new File(dir, "PROJECT_NAME" + ".mp4");
