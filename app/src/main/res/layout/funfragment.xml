@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/funfargment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Funfragment"
+    android:orientation="vertical">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/actors_list"
+        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        tools:listitem="@layout/fun_item">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="192dp" />
+
+</LinearLayout>
